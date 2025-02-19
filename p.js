@@ -11,7 +11,7 @@ const URL = 'https://4anime.gg/random';
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
 
     // Extract title
-    const title = await page.$eval('div.detail-min > h1', el => el.textContent.trim());
+    const title = await page.$eval('div.p-name vcard-fullname d-block overflow-hidden', el => el.textContent.trim());
 
     // Extract genres
     const genres = await page.$$eval('div.genres a', elements => 
