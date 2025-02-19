@@ -1,15 +1,31 @@
-const { chromium } = require('playwright')
+const { chromium } = require('playwright');
 
+const URL = 'https://4anime.gg/random';
 
 (async () => {
-const browser = await chromium.launch()
-const context = await browser.newContext()
-const page = await context.newPage ()
+    // Launch a headless browser
+    const browser = await chromium.launch();
+    const page = await browser.newPage();
 
-await page.goto('https://github.com/suhail')
+    // Navigate to the page
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
 
-const [username] = await page.locator('.p-name vcard-fullname d-block overflow-hidden').allInnerTexts();
+    // Extract title
+    const title = await page.$eval('div.detail-min > h1', el => el.textContent.trim());
 
-console.log(username);
-await browser.close();
-  })();
+    // Extract genres
+    const genres = await page.$$eval('div.genres a', elements => 
+        elements.map(el => el.textContent.trim())
+    );
+
+    // Extract first episode link
+    const vid = await page.$eval('.item.ep-item', el => el.getAttribute('href'));
+
+    // Log the results
+    console.log("Title:", title);
+    console.log("Genres:", genres);
+    console.log("First Episode Link:", vid);
+
+    // Close browser
+    await browser.close();
+})();
