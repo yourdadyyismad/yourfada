@@ -11,20 +11,12 @@ const URL = 'https://4anime.gg/random';
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
 
     // Extract title
-    const title = await page.$eval('div.p-name vcard-fullname d-block overflow-hidden', el => el.textContent.trim());
+    const title = await page.title();
 
-    // Extract genres
-    const genres = await page.$$eval('div.genres a', elements => 
-        elements.map(el => el.textContent.trim())
-    );
-
-    // Extract first episode link
-    const vid = await page.$eval('.item.ep-item', el => el.getAttribute('href'));
+    // Extract genres;
 
     // Log the results
-    console.log("Title:", title);
-    console.log("Genres:", genres);
-    console.log("First Episode Link:", vid);
+    console.log("Title:", title)!
 
     // Close browser
     await browser.close();
