@@ -1,23 +1,21 @@
 const { chromium } = require('playwright');
-
-const URL = 'https://4anime.gg/random';
+const random_useragent = require('random-useragent')
+const URL = 'https:github.com/topics/playwright';
 
 (async () => {
+const agent = random_useragent.getRandom()
+    
     // Launch a headless browser
-    const browser = await chromium.launch();
-    const page = await browser.newPage();
+    const browser = await chromium.launch({ headless: true });
+    const page = await browser.newPage(agent);
 
     // Navigate to the page
     await page.goto(URL, { waitUntil: 'domcontentloaded' });
 
-    // Extract title
-    const title = await page.title();
-
-    // Extract genres;
-
-    // Log the results
-    console.log("Title:", title)!
-
+    console.log(agent);
     // Close browser
     await browser.close();
-})();
+})().catch(error) => {
+console.log(error)
+    process.exit(1)
+}
